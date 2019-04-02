@@ -3,13 +3,16 @@
 
 ### Requirements
 
-- JDK 8+
+- JDK 11+
 
 
 ### Todos
 
 - [x] build source code example index in README
 - [ ] review equal and hashCode examples
+- [x] add function reference example
+- [ ] add more stream examples
+- [ ] add interface default method example
 - [ ] add RxJava exmaple
 
 === Reactive types to cover:
