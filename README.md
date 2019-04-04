@@ -9,6 +9,7 @@
 ### Todos
 
 - [x] build source code example index in README
+- [ ] build sonar and travis-CI hook-up
 - [ ] review equal and hashCode examples
 - [x] add function reference example
 - [ ] add more stream examples
