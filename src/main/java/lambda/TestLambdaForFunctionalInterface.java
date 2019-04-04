@@ -4,7 +4,7 @@ package lambda;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class TestLambda {
+public class TestLambdaForFunctionalInterface {
 
     /**
      * calling lambda based on functional interface
@@ -41,6 +41,14 @@ public class TestLambda {
         System.out.println("custom greeting to " + function.apply(target));
     }
 
+
+    /**
+     * A lambda expression can be assigned to a variable or passed to a method expecting a functional interface
+     * as argument, provided the lambda expression has the same signature as the abstract method of the functional
+     * interface.
+     * <p/>
+     * Code below shows different cases of using lambda to match functional interfaces.
+     */
     public static void main(String[] args) {
         System.out.println("main is running");
 
@@ -74,7 +82,7 @@ public class TestLambda {
         System.out.println(result);
 
         // call a custom method as function by its reference
-        customGreeting("method value reference as function", TestLambda::customGreeter);
+        customGreeting("method value reference as function", TestLambdaForFunctionalInterface::customGreeter);
 
         // call an external class (static) method
         extGreeting("test-ext-class-method-as-func", MethodProvider::staticGreeterMethod);
@@ -104,6 +112,8 @@ class MethodProvider {
 
 
 /**
+ * In short, a functional interface is an interface that specifies exactly one abstract method.
+ * <p/>
  * Functional interfaces, which are gathered in the java.util.function package, satisfy most
  * developers’ needs in providing target types for lambda expressions and method references.
  * Each of these interfaces is general and abstract, making them easy to adapt to almost any
@@ -115,6 +125,9 @@ class MethodProvider {
 @FunctionalInterface
 interface Greeter {
 
+    /**
+     * The abstract method defined in the functional interface is called 'function descriptor'.
+     */
     String greet(String target);
 
 }
