@@ -88,10 +88,10 @@ public class TestLambdaCaller {
 
         callConsumer("consumer", (String name) -> System.out.println("How are you " + name + " !"));
 
-        System.out.println("when dicision is like:");
+        System.out.println("when decision is like:");
         callBiConsumer("Jenny", "Tennis", (p, h) -> System.out.println(p + " likes " + h));
 
-        System.out.println("when dicision is hate:");
+        System.out.println("when decision is hate:");
         callBiConsumer("Jenny", "Swimming", (p, h) -> System.out.println(p + " hates " + h));
 
         System.out.println("when calculator is power:");
