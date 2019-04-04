@@ -44,7 +44,7 @@ public class TestLambda {
     public static void main(String[] args) {
         System.out.println("main is running");
 
-        // call greeting with an inline mode of lambda
+        // define an inline lambda definition implementing the Greeter functional interface
         String result = greeting("test-target",
                 // casting inline lambda to interface to avoid method call ambiguity
                 (Greeter) tgt -> {
@@ -52,6 +52,7 @@ public class TestLambda {
                     return tgt;
                 }
         );
+        System.out.println(result);
 
         // define an explicitly named lambda
         Greeter greeterLambda = target -> {
@@ -60,6 +61,7 @@ public class TestLambda {
         };
         // and then call lambda by its name
         result = greeting("test-target-with-named-lambda", greeterLambda);
+        System.out.println(result);
 
         // use java.util.function.Function to define lambda to skip functional interface definition
         // in our case the underlying function type is Function<T, R> as there's only one input parameter
@@ -69,8 +71,9 @@ public class TestLambda {
         };
         // then call it
         result = greeting("test-func-lambda", greeterFunc);
+        System.out.println(result);
 
-        // call a custom method as function by its value reference
+        // call a custom method as function by its reference
         customGreeting("method value reference as function", TestLambda::customGreeter);
 
         // call an external class (static) method
@@ -79,7 +82,6 @@ public class TestLambda {
         // call an external class instance method
         extGreeting("test-ext-instance-method-as-func", new MethodProvider("myTag")::greeterMethod);
     }
-
 }
 
 
@@ -98,7 +100,6 @@ class MethodProvider {
     void greeterMethod(String target) {
         System.out.println("instance greeterMethod (tag: " + tag + ") used as functional greeting: " + target);
     }
-
 }
 
 
