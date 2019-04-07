@@ -1,4 +1,4 @@
-package functionreference;
+package methodreference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,8 +6,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class TestFunctionRef {
 
+/**
+ * There are three type of Java method references.
+ * - static method reference at class level: Class::staticMethod
+ * - instance method reference at class level: Class::instanceMethod
+ * - instance method reference at instance level: instance::instanceMethod
+ */
+public class TestMethodRef {
 
     public static void main(String[] args) {
 
@@ -25,8 +31,16 @@ public class TestFunctionRef {
         List heavyApples = filterByWeight(inventory, 100);
         System.out.println("heavy apples: " + heavyApples);
 
-        List redApples = filterByRed(inventory);
+        List redApples = filterByRedColor(inventory);
         System.out.println("red  apples: " + redApples);
+
+        List greenApples3 = filterByGreenColor(inventory);
+        System.out.println("greens  apples: " + greenApples3);
+
+        List heavyApples2 = filterByWeight(inventory);
+        System.out.println("heavy apples: " + heavyApples2);
+
+
     }
 
     /**
@@ -52,7 +66,7 @@ public class TestFunctionRef {
     }
 
     /**
-     * Use functional interface with inline implementation that returns boolean
+     * Implement the functional interface with inline function definition
      */
     public static List<Apple> filterByWeight(List<Apple> apples, int weight) {
         return filterBy(apples, new Function<Apple, Boolean>() {
@@ -64,22 +78,34 @@ public class TestFunctionRef {
     }
 
     /**
-     * The same functional interface implemented by a lambda
+     * Implement the functional interface with a lambda
      */
     public static List<Apple> filterByColor(List<Apple> apples, Color color) {
         return filterBy(apples, apple -> apple.isColor(color));
     }
 
     /**
-     * Now use instance method for function reference in the stream
+     * Implement the functional reference with an instance method with class
      */
-    public static List<Apple> filterByRed(List<Apple> apples) {
+    public static List<Apple> filterByRedColor(List<Apple> apples) {
         return apples.stream().filter(Apple::isRed)
                 .collect(Collectors.toList());
     }
 
-}
+    /**
+     * Implement the functional interface with a static method with class
+     */
+    public static List<Apple> filterByGreenColor(List<Apple> apples) {
+        return apples.stream().filter(AppleChecker::isBlue)
+                .collect(Collectors.toList());
+    }
 
+    public static List<Apple> filterByWeight(List<Apple> apples) {
+        return apples.stream().filter(new AppleChecker(110)::isHeavy)
+                .collect(Collectors.toList());
+    }
+
+}
 
 class Apple {
     Color color;
@@ -110,14 +136,6 @@ class Apple {
         return weight;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
     public Color getColor() {
         return this.color;
     }
@@ -125,6 +143,29 @@ class Apple {
     @Override
     public String toString() {
         return this.color + " apple: " + weight;
+    }
+}
+
+/**
+ * Helper class
+ */
+class AppleChecker {
+    int weightThreshold = 100;
+
+    public AppleChecker(int weightThreshold) {
+        this.weightThreshold = weightThreshold;
+    }
+
+    public static boolean isBlue(Apple apple) {
+        return apple.color == Color.GREEN;
+    }
+
+    public boolean isHeavy(Apple apple) {
+        return apple.weight >= this.getWeightThreshold();
+    }
+
+    public int getWeightThreshold() {
+        return weightThreshold;
     }
 }
 
