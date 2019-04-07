@@ -34,13 +34,15 @@ public class TestLambdaRunnable {
         String threadName = Thread.currentThread().getName();
         System.out.println("main thread: " + threadName);
 
+        // now use lambda as runnable wrapped by thread construction
+
         new Thread(worker).start();
         new Thread(worker).start();
         new Thread(worker).start();
 
         System.out.println("main moves on");
 
-        // now use lambda runnable in executor
+        // now use lambda as runnable in executor
 
         ExecutorService es = Executors.newSingleThreadExecutor();
         es.submit(() -> {

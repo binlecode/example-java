@@ -119,6 +119,8 @@ class MethodProvider {
  * Each of these interfaces is general and abstract, making them easy to adapt to almost any
  * lambda expression.
  * <p>
+ * The @FunctionalInterface annotation is is used to indicate that the interface is intended to
+ * be a functional interface and is therefore useful for documentation.
  * Using the @FunctionalInterface annotation, the compiler will trigger an error in response
  * to any attempt to break the predefined structure of a functional interface.
  */
