@@ -4,6 +4,14 @@ package lambda;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+
+/**
+ * A functional interface is an interface that declares exactly one abstract method.
+ * Lambda expressions can be used only where a functional interface is expected.
+ * Lambda expressions let you provide the implementation of the abstract method of
+ * a functional interface directly inline and treat the whole expression as an instance
+ * of a functional interface.
+ */
 public class TestLambdaForFunctionalInterface {
 
     /**
