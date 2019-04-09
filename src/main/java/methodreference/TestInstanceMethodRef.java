@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Instance method is very useful in reference mode as 'helper' functions but holds some of the closure
  * feature that can access (not change) local variables in enclosing defining context.
- * <p/>
+ * <p>
  * Such helper instance method can be private and read instance scope state.
  */
 public class TestInstanceMethodRef {

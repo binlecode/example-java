@@ -11,7 +11,7 @@ import java.util.Date;
  * Firstly, avoid the old legacy date-time classes such as java.util.Date whenever possible.
  * They are poorly designed, confusing, and troublesome.
  * They were supplanted by the {@code java.time classes} for for many reasons.
- * <p/>
+ * <p>
  * If you must, you can convert to/from java.time types to the old.
  */
 public class TestLocalDate2Date {
@@ -27,7 +27,7 @@ public class TestLocalDate2Date {
      * Keep in mind that a java.util.Date is a misnomer as it represents a date plus a time-of-day, in UTC.
      * In contrast, the LocalDate class represents a date-only value without time-of-day and without time zone.
      * A time zone is crucial in determining a date. For any given moment, the date varies around the globe by zone.
-     * <p/>
+     * <p>
      * Going from {@code java.util.Date} to {@code java.time} means converting to the equivalent class of
      * {@code java.time.Instant}. The Instant class represents a moment on the timeline in UTC with a resolution
      * of nanoseconds (up to nine (9) digits of a decimal fraction).

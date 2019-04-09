@@ -152,12 +152,12 @@ public class TestObservable {
     /**
      * Most Observable function pipelines are synchronous (unless a specific operator needs to be async,
      * such as timeout or observeOn), whereas the Observable itself can be async.
-     * <p/>
+     * <p>
      * events (onNext(), onCompleted(), onError()) can never be emitted concurrently.
-     * <p/>
+     * <p>
      * In this example, the Observable is async (it emits on a thread different from that of the subscriber),
      * so subscribe is nonblocking, and the println at the end will output before events are propagated.
-     * <p/>
+     * <p>
      * However, the filter() and map() functions are synchronously executed on the calling thread that emits
      * the events. This is generally the behavior we want: an asynchronous pipeline (the Observable and composed
      * operators) with efficient synchronous computation of the events.

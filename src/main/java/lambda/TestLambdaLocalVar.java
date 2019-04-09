@@ -9,7 +9,7 @@ import java.util.Arrays;
  * variable as access to a copy of it, rather than access to the original variable.
  * This restriction also discourages typical imperative programming patterns that mutate an
  * outer variable.
- * <p/>
+ * <p>
  * This is an important difference between lambda (or anonymous inner class) and closure.
  * Scientifically, a closure is an instance of a function that can reference nonlocal variables
  * of that function with no restrictions.
@@ -17,7 +17,7 @@ import java.util.Arrays;
  * But Java has a restriction that lambda (and anonymous inner class) can’t modify the content of
  * local variables of a method in which the lambda is defined. Those variables have to be implicitly
  * final.
- * <p/>
+ * <p>
  * This restriction exists because local variables live on the stack and are implicitly confined to
  * the thread they’re in. Allowing capture of mutable local variables opens new thread-unsafe possibilities.
  */

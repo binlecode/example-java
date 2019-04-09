@@ -54,7 +54,7 @@ public class TestLambdaForFunctionalInterface {
      * A lambda expression can be assigned to a variable or passed to a method expecting a functional interface
      * as argument, provided the lambda expression has the same signature as the abstract method of the functional
      * interface.
-     * <p/>
+     * <p>
      * Code below shows different cases of using lambda to match functional interfaces.
      */
     public static void main(String[] args) {
@@ -121,7 +121,7 @@ class MethodProvider {
 
 /**
  * In short, a functional interface is an interface that specifies exactly one abstract method.
- * <p/>
+ * <p>
  * Functional interfaces, which are gathered in the java.util.function package, satisfy most
  * developers’ needs in providing target types for lambda expressions and method references.
  * Each of these interfaces is general and abstract, making them easy to adapt to almost any

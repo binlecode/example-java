@@ -12,14 +12,14 @@ import java.util.*;
  * Unix and Unix-like operating systems have long had efficient implementations of selectors,
  * so this sort of networking program is a model of good performance for a Java-coded
  * networking program.
- * <p/>
+ * <p>
  * Compile this source, then launch it from the command-line with an invocation such as
  * java MultiPortEcho 8005 8006.
  * Once the MultiPortEchoer is running, start up a simple telnet or other terminal emulator
  * running against ports 8005 and 8006. You will see that the program echoes back characters it
  * receives -- and does it in a single Java thread!
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * A Java NIO {@link ServerSocketChannel} is a channel that can listen for incoming TCP connections,
  * just like a ServerSocket in standard Java Networking.
  */

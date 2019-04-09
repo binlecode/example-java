@@ -7,13 +7,13 @@ package rxjava;
  * produced lazily but also not likely cached in any way.
  * Cold Observables typically come from Observable.create(), which should not start any logic but
  * instead postpone it until someone actually listens.
- * <p/>
+ * <p>
  * Common examples of cold Observables are create(), Observable.just(), from(), range(), etc..
- * <p/>
+ * <p>
  * Hot Observables are different. After you get a hold of such an Observable it might already be
  * emitting events no matter how many Subscribers they have. Observable pushes events downstream,
  * even if no one listens and events are possibly missed.
- * <p/>
+ * <p>
  * Difference b/t hot and cold Observables:
  * - No matter when you subscribe to a cold Observable—immediately or after hours—you always receive
  *   a complete and consistent set of events. On the other hand, if the Observable is hot, you can

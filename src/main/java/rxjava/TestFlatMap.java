@@ -40,7 +40,7 @@ public class TestFlatMap {
 
     /**
      * Show the low-level mechanical way of constructing inline Function.
-     * <p/>
+     * <p>
      * Note the functional interface in <code>.flatMap()</code> that takes in {@code List<String>} but
      * output observable with String type. The flatMap operator expects this observable and merge it into
      * the new stream it creates.
