@@ -13,7 +13,8 @@ public class TestStreamUnbounded {
     public static void main(String[] args) {
 
 //        streamFromIterate();
-        streamFromGenerate();
+//        streamFromGenerate();
+        distinctTrap();
     }
 
 
@@ -107,6 +108,30 @@ public class TestStreamUnbounded {
                         .boxed()
                         .collect(Collectors.toList())
         );
+    }
+
+    /**
+     * When have a unbounded stream, ordering b/t distinct and limit (or takeWhile) is critical.
+     */
+    public static void distinctTrap() {
+        int upperBound = 5;
+        // this code will run endlessly if upperBound is less than 5
+        // since distinct is before limit, the distince values will never be more than upperbound value
+        // therefore, the stream will run forever to fill 5 element limit
+        // once upperBound is 6 or larger, the range generator will soon fill 0, 1, 2, 3, 4 values to meet
+        // the 5-element limit
+        System.out.println("5 distinct numbers: ");
+        Stream.generate(() -> (int)(Math.random() * upperBound))
+                .distinct()
+                .limit(5)
+                .forEach(System.out::println);
+
+        // now reverse the order putting limit before distinct, this limits only 5 random number generated
+        System.out.println("distinct numbers from 5 random numbers: ");
+        Stream.generate(() -> (int)(Math.random() * upperBound))
+                .limit(5)
+                .distinct()
+                .forEach(System.out::println);
     }
 
 }
