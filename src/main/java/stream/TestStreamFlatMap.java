@@ -110,7 +110,7 @@ public class TestStreamFlatMap {
         System.out.println("sequential stream run elapse time: " + (System.nanoTime() - ts) + " ns");
 
         // when apply parallelStream on this stream, it actually takes more time then sequential version
-        // mainly due to short target stream length with high additional thread management overhead
+        // mainly due to flatMap nest streams merging with parallel thread overhead.
         ts = System.nanoTime();
         System.out.println(
                 wordList.parallelStream()

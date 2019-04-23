@@ -12,9 +12,9 @@
 - [ ] build sonar and travis-CI hook-up
 - [ ] review equal and hashCode examples
 - [x] add function reference example
-- [ ] add more stream examples
+- [x] add more stream examples
 - [ ] add interface default method example
-- [ ] add RxJava exmaple
+- [ ] add RxJava example
 
 === Reactive types to cover:
 - [x] Observable: the heart of Rx, a class that emits a stream of data or events
