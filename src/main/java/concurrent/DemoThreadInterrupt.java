@@ -21,7 +21,7 @@ public class DemoThreadInterrupt {
 
     public static void main(String[] args) {
         //fixme: this try-catch won't work as it is not able catch cli terminal ctrl-c
-        //fixme: need to define Runtime shutdown hook
+        //fixme: need to define Runtime shutdown hook: http://zguide.zeromq.org/java:interrupt
         try {
             threadMessage("Starting MessageLoop thread");
 
