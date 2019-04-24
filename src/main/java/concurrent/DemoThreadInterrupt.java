@@ -1,15 +1,18 @@
 package concurrent;
 
 /**
- * ceated by ble on 2/24/14.
+ * Thread is a flow of operation.
  */
 public class DemoThreadInterrupt {
 
+    /**
+     * Define a runnable class to loop message until interrupted either programmatically or system SIGNAL (Ctrl-C)
+     */
     private static class MessageLoop implements Runnable {
         @Override
         public void run() {
             try {
-                for (int i = 0; i < 200; i++) {
+                for (int i = 0; i < 200; i++) {  // this loop will run for 200s if not interrupted
                     Thread.sleep(1000);
                     threadMessage(">> message loop is running round #" + i);
                 }
@@ -19,34 +22,43 @@ public class DemoThreadInterrupt {
         }
     }
 
-    public static void main(String[] args) {
-        //fixme: this try-catch won't work as it is not able catch cli terminal ctrl-c
-        //fixme: need to define Runtime shutdown hook: http://zguide.zeromq.org/java:interrupt
-        try {
-            threadMessage("Starting MessageLoop thread");
+    public static void main(String[] args) throws InterruptedException {
 
-            Thread t = new Thread(new MessageLoop());
-            t.start();
-            threadMessage("Waiting for MessageLoop thread to finish");
 
-            // wait until MessageLoop thread exits
-            while (t.isAlive()) {
-                // join is dependent on the OS for timing, so you should not
-                // assume that join will wait exactly as long as you specify
-                t.join(1000);
-                threadMessage("I am waiting ...");
-                Thread.sleep(5000);
-                if (t.isAlive()) {
-                    threadMessage("Tired of waiting");
+        Thread t = new Thread(new MessageLoop());
+
+        // need to define Runtime shutdown hook to catch SYSINT interruption (ie Ctrl-C)
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                threadMessage("System interrupt received, terminating MessageLoop thread");
+                try {
                     t.interrupt();
                     t.join();
+                } catch (Exception ex) {  // this should not happen unless t.interrupt doesn't work (t is zombie)
+                    threadMessage("Exception: " + ex.getMessage());
                 }
             }
+        });
 
-            threadMessage("Finally done");
-        } catch (Exception ie) {
-            threadMessage("Got interrupted, abort");
+        threadMessage("Starting MessageLoop thread");
+        t.start();
+
+        // deadline count down and interrupt the MessageLoop thread
+        while (t.isAlive()) {
+            // join is dependent on the OS for timing, so you should not
+            // assume that join will wait exactly as long as you specify
+            t.join(1000);
+            threadMessage("Waiting for interruption ...");
+            Thread.sleep(5000);
+            if (t.isAlive()) {
+                threadMessage("Tired of waiting, deadline expired, interrupting MessageLoop thread");
+                t.interrupt();
+                t.join();
+            }
         }
+        threadMessage("Finally done");
     }
 
     static void threadMessage(String message) {
