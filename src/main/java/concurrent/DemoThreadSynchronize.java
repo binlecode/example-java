@@ -41,7 +41,7 @@ public class DemoThreadSynchronize {
      * What's interesting for 'both' mode is that in this case the checkAndAdd() won't see
      * inconsistent check and update value either.
      * This is because synchronized syncCheckAndAdd() method forced the instance state synchronization
-     * with main memory, including the non-sync count instance field.
+     * with main memory, including both non-sync and sync count instance field variables.
      * <p>
      * @throws InterruptedException
      */
@@ -66,11 +66,13 @@ public class DemoThreadSynchronize {
         // this is not thread safe!
         count += 1;
 
-        // the printed message may show count value inconsistent from add statement
+        // the printed message may show count value difference > 1 after add statement
+        // because count value may already be changed by other threads during the delay or
+        // after the add statement
         threadMessage(" >> check count = " + origCount + ", after delay, added count = " + count);
 
-        // and the > 1 check may also use a count value this is already changed by other threads
-        // after the previous message print!
+        // and the > 1 check may also use a count value that is changed by other threads
+        // after previous message print statement
         if (count - origCount > 1) {
             threadMessage(" >>>>>>>> non-atomic change due to lack of synchronization !!!");
         }
@@ -83,10 +85,10 @@ public class DemoThreadSynchronize {
     public synchronized void syncCheckAndAdd() throws InterruptedException {
         int origSyncCount = syncCount;
         Thread.sleep(1000);
-        syncCount += 1;   // this is not thread safe!
+        syncCount += 1;
         threadMessage(" SYNCHRONIZED >> check count = " + origSyncCount + ", after delay, added count = " + syncCount);
         if (syncCount - origSyncCount > 1) {
-            threadMessage(" SYNCHRONIZED >>>>>>>>  non-atomic change due to lack of synchronization !!!");
+            threadMessage(" >>>>>>>>  non-atomic change due to lack of synchronization !!!");
         }
     }
 

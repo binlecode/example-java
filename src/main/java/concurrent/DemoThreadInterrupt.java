@@ -24,23 +24,19 @@ public class DemoThreadInterrupt {
 
     public static void main(String[] args) throws InterruptedException {
 
-
         Thread t = new Thread(new MessageLoop());
 
-        // need to define Runtime shutdown hook to catch SYSINT interruption (ie Ctrl-C)
+        // need to define Runtime shutdown hook to catch system interruption signal (ie Ctrl-C)
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                threadMessage("System interrupt received, terminating MessageLoop thread");
-                try {
-                    t.interrupt();
-                    t.join();
-                } catch (Exception ex) {  // this should not happen unless t.interrupt doesn't work (t is zombie)
-                    threadMessage("Exception: " + ex.getMessage());
-                }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            threadMessage("System interrupt received, terminating MessageLoop thread");
+            try {
+                t.interrupt();
+                t.join();
+            } catch (Exception ex) {  // this won't happen unless t.interrupt doesn't work (t is zombie in this case)
+                threadMessage("Exception: " + ex.getMessage());
             }
-        });
+        }));
 
         threadMessage("Starting MessageLoop thread");
         t.start();
