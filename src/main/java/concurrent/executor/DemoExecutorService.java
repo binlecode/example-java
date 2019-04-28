@@ -31,7 +31,12 @@ public class DemoExecutorService {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-        ExecutorService es = Executors.newWorkStealingPool();
+        System.out.println("System cpu cores: " + Runtime.getRuntime().availableProcessors());
+
+        // workStealingPool is new since 1.8, a better fixed pool executor default to number of cpu cores
+        // rather than fixed pool executor, workStealingPool manages number of worker threads dynamically
+        // according to load
+        ExecutorService wspEs = Executors.newWorkStealingPool();
 
         List<Callable<String>> callables = Arrays.asList(
                 () -> {
@@ -49,7 +54,7 @@ public class DemoExecutorService {
                 }
         );
 
-        es.invokeAll(callables)
+        wspEs.invokeAll(callables)
                 .stream()
                 .map(future -> {
                     try {
@@ -59,7 +64,7 @@ public class DemoExecutorService {
                     }
                 }).forEach(System.out::println);
 
-        safeShutdown(es, 100);
+        safeShutdown(wspEs, 100);
 
         // setting scheduled pool size to 1 is equivalent to singleThreadScheduledService
 
