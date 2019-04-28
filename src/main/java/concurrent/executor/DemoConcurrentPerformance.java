@@ -59,10 +59,11 @@ public class DemoConcurrentPerformance {
      * or IO intensive the target process is.
      * <p>
      * In this example, the target process is detecting primes and count them with an upper bound,
-     * which is CPU intensive, in this case the <code>blocking coefficient</code> should be low.
-     * This means little time is spent on IO (blocking) waiting, therefore the optimal pool size won't
-     * be too much different from system CPU core numbers. This is proven by the resulting performance
-     * curve that saturates around pool size around 8 and 9 (system cpu core number is 8).
+     * which is CPU intensive, in this case the <code>blocking coefficient</code> should be 0.
+     * This means little time is spent on IO (blocking) waiting, therefore the optimal pool size would be
+     * be the number of system CPU core. This is proven by the resulting performance
+     * curve that saturates around pool size around 8 (with testing system cpu core number of 8).
+     * With a different hardware system,the curve will saturate around the number of cpu cores.
      * <p>
      * <code>blocking coefficient</code> is important factor in estimating optimal parallelism.
      */
