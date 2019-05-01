@@ -23,7 +23,8 @@ public class DemoConcurrentPerformance {
      * 87141196 ns with parallelism
      * <p>
      * Note this example, the parallel stream uses system default thread pool, which is
-     * {@link ForkJoinPool#commonPool}. This pool is shared by all parallel stream processing.
+     * {@link ForkJoinPool#commonPool}. This pool is the default thread pool for every ForkJoinTask,
+     * aka shared by all parallel stream processing.
      * This is viewed by many as one of the biggest limitations of Stream API.
      * (@see https://www.baeldung.com/java-8-parallel-streams-custom-threadpool)
      */
