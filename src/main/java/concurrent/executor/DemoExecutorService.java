@@ -11,8 +11,35 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * {@link java.util.concurrent.Executors} factory methods provide a rich array of thread pool executors to work
+ * with tasks (Runnable or Callable).
+ * <p>
+ * Tasks can be assigned to the ExecutorService using several methods, including execute(), which is inherited
+ * from the Executor interface, and also submit(), invokeAny(), invokeAll().
+ */
 public class DemoExecutorService {
 
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        demoWorkStealingPool();
+        demoSheduledThreadPool();
+    }
+
+    /**
+     * In general, the ExecutorService will not be automatically destroyed when there is not task to process.
+     * It will stay alive and wait for new work to do.
+     * <p>
+     * In some cases this is very helpful; for example, if an app needs to process tasks which appear on an
+     * irregular basis or the quantity of these tasks is not known at compile time.
+     * On the other hand, an app could reach its end, but it will not be stopped because a waiting ExecutorService
+     * will cause the JVM to keep running.
+     * <p>
+     * To properly shut down an ExecutorService, we have the shutdown() and shutdownNow() APIs.
+     * <p>
+     * This method shows the preferred pattern to shutdown a thread pool safely.
+     * @param es the ExecutorService instance
+     * @param timeoutMills the timeout value in ms
+     */
     static void safeShutdown(ExecutorService es, int timeoutMills) {
         try {
             es.shutdown();
@@ -24,13 +51,26 @@ public class DemoExecutorService {
         }
     }
 
+    /**
+     * Utility method to print current thread info before message.
+     * @param msg
+     */
     static void threadPrint(String msg) {
         System.out.println(Thread.currentThread().getName() + ": " + msg);
     }
 
-
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-
+    /**
+     * In WorkStealingPool each thread in the pool has its own double-ended queue (aka deque)
+     * which stores tasks.
+     * <p>
+     * This architecture is vital for balancing the thread’s workload with
+     * the help of the work-stealing algorithm, where free threads try to “steal” work from deques
+     * of busy threads: by default, a worker thread gets tasks from the head of its own deque.
+     * When it is empty, the thread takes a task from the tail of the deque of another busy thread
+     * or from the global entry queue, since this is where the biggest pieces of work are likely
+     * to be located.
+     */
+    public static void demoWorkStealingPool() throws InterruptedException {
         System.out.println("System cpu cores: " + Runtime.getRuntime().availableProcessors());
 
         // workStealingPool is new since 1.8, a better fixed pool executor default to number of cpu cores
@@ -54,6 +94,7 @@ public class DemoExecutorService {
                 }
         );
 
+        // invokeAll returns a list of Futures thus can be concatenated with stream processing
         wspEs.invokeAll(callables)
                 .stream()
                 .map(future -> {
@@ -62,33 +103,46 @@ public class DemoExecutorService {
                     } catch (InterruptedException | ExecutionException e) {
                         return "future doesn't return with error: " + e.getMessage();
                     }
-                }).forEach(System.out::println);
+                })
+                .forEach(System.out::println);
 
         safeShutdown(wspEs, 100);
+    }
+
+    /**
+     * It is recommended to schedule fixed delay tasks when task's running duration is not easily predictable
+     */
+    public static void demoSheduledThreadPool() throws InterruptedException, ExecutionException {
 
         // setting scheduled pool size to 1 is equivalent to singleThreadScheduledService
 
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+
+        // simple scheduling with a specific delay
         ScheduledFuture<String> future = ses.schedule(
                 () -> {
                     System.out.println(Thread.currentThread().getName() + "running");
                     return Thread.currentThread().getName();
-                }, 2000, TimeUnit.MILLISECONDS
+                }, 2000, TimeUnit.MILLISECONDS   // set delay to 2000 ms
         );
 
         TimeUnit.MILLISECONDS.sleep(1000);
+        assert !future.isDone();  // work is not done after 1000 ms delay
 
         // Scheduling a task produces a specialized future of type ScheduledFuture which, in addition
         // to Future, provides the method getDelay() to retrieve the remaining delay
-        System.out.printf("get future remaining delay: %d ms \n", future.getDelay(TimeUnit.MILLISECONDS));
+        long remainingDelay = future.getDelay(TimeUnit.MILLISECONDS);
+        System.out.printf("get future remaining delay: %d ms \n", remainingDelay);
 
-        TimeUnit.MILLISECONDS.sleep(1000);  // after sleep the work should be done
+        TimeUnit.MILLISECONDS.sleep(1000);  // after this delay the work should be done
 
-        assert future.isDone();
+        assert future.isDone(); // this is not a blocking call
         System.out.println(String.format("future returned: ${}", future.get()));
 
         AtomicInteger runIdx = new AtomicInteger(0);
 
+        // define a runnable by a lambda, and it is safe to be used by multiple schedulers as
+        // this is purely functional and with no shared state
         Runnable fixedRateRun = () -> {
             int idx = runIdx.incrementAndGet();
             threadPrint("task " + idx + " running at fixed rate");
@@ -102,14 +156,11 @@ public class DemoExecutorService {
 
         ses.scheduleAtFixedRate(fixedRateRun, 100, 1000, TimeUnit.MILLISECONDS);
 
-        // it is advisable to schedule fixed delay tasks when task's running duration is not easily predictable
-
         ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(3);
         ses2.scheduleWithFixedDelay(fixedRateRun, 0, 500, TimeUnit.MILLISECONDS);
 
-
-//        safeShutdown(ses, 100);
-
-
+        TimeUnit.MILLISECONDS.sleep(5000);
+        safeShutdown(ses, 100);
+        safeShutdown(ses2, 100);
     }
 }
