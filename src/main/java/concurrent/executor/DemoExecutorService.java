@@ -12,11 +12,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * {@link java.util.concurrent.Executors} factory methods provide a rich array of thread pool executors to work
- * with tasks (Runnable or Callable).
+ * In JVM a thread itself can not be reused, aka, it has a mechanical lifecycle management.
+ * Each {@code ExecutorSerivce} represents a thread pool. Therefore rather than tying a thread lifecycle to
+ * a task, an ExecutorService provides thread management and let programmer focus on how to run a task.
  * <p>
- * Tasks can be assigned to the ExecutorService using several methods, including execute(), which is inherited
- * from the Executor interface, and also submit(), invokeAny(), invokeAll().
+ * {@link java.util.concurrent.Executors} factory methods provide a rich array of thread pools - single threaded,
+ * cached, priority based, scheduled/periodic, or fixed size, and the size of the wait queue - to work with
+ * tasks (Runnable or Callable).
+ * <p>
+ * A single task can be assigned to the ExecutorService using several methods, including execute() and submit().
+ * To run a collection of tasks, use invokeAny() or invokeAll() for different termination logic.
  */
 public class DemoExecutorService {
 
