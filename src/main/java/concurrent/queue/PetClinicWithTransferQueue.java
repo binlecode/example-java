@@ -74,6 +74,9 @@ class CallCenter extends Thread {
      */
     protected AtomicLong patientIndex = new AtomicLong(0);
 
+    /**
+     * a global flag for the open/close status of the call center
+     */
     protected volatile boolean isClosed = false;
 
     /**
