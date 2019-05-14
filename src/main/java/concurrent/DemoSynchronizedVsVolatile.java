@@ -32,6 +32,7 @@ public class DemoSynchronizedVsVolatile {
      * In this demo, two synchronized methods in two independent threads are changing the same instance
      * value, {code syncCounter}, they are blocking each other since they share the same lock monitor,
      * the host instance.
+     * This mutual blocking between threads by synchronization is a big impact to performance.
      */
     public static void demoSynchronized() {
 
@@ -49,6 +50,8 @@ public class DemoSynchronizedVsVolatile {
                 .scheduleAtFixedRate(
                         () -> threadPrint("MONITOR => instance variable syncCounter = " + demo.syncCounter),
                         0, 100, TimeUnit.MILLISECONDS);
+
+        //todo: shut down all created thread pools after some run time
     }
 
     /**
@@ -112,6 +115,9 @@ public class DemoSynchronizedVsVolatile {
                             TimeUnit.MILLISECONDS.sleep(100);
                         }
                         volaCounter ++;
+                        // There could be a change of volaCounter value introduced by other threads
+                        // between the above and below two statements.
+                        // The reason is this variable is not an Atomic variable, such as AtomInteger.
                         threadPrint("    ADD => after, volaCounter: " + volaCounter);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -138,6 +144,8 @@ public class DemoSynchronizedVsVolatile {
                 .scheduleAtFixedRate(
                         () -> threadPrint("MONITOR => volatile variable volaCounter = " + volaCounter),
                         0, 100, TimeUnit.MILLISECONDS);
+
+        //todo: shut down all created thread pools after some run time
     }
 
     private static void threadPrint(String message) {
