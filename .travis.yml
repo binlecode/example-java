@@ -5,8 +5,8 @@ jdk:
   # - oraclejdk8
   # - oraclejdk11
   # as of Feb 2020, travis-ci no longer supports Oracle JDK8, thus switching to openjdk
-  - openjdk8
-  # - openjdk11
+  # - openjdk8
+  - openjdk11
 
 sudo: false # faster builds
 
