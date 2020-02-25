@@ -1,7 +1,5 @@
 package datetime;
 
-import datetime.CalendarPage;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +20,6 @@ public class CalendarPageTest {
 	public void testCalendarPage() {
 		CalendarPage calPg = new CalendarPage();
 		calPg.printMonthCalendarPage(1980, 9);
-		
 	}
 	
 	

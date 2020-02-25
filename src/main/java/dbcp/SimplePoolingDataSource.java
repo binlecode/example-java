@@ -30,11 +30,9 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 public class SimplePoolingDataSource {
 
-    
-
     public static DataSource setupDataSource(String connectURI) {
     	
-    	connectURI = "jdbc:oracle:thin:@10.253.15.6:1521:strcoor1";
+    	// connectURI = "jdbc:oracle:thin:@10.253.15.6:1521:strcoor1";
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("oracle.jdbc.driver.OracleDriver");
         ds.setUsername("mms");
@@ -43,9 +41,6 @@ public class SimplePoolingDataSource {
         
         System.out.println("NumActive: " + ds.getNumActive());
         System.out.println("NumIdle: " + ds.getNumIdle());
-        
-        
-        
        
         return ds;
     }
@@ -55,7 +50,6 @@ public class SimplePoolingDataSource {
         BasicDataSource bds = (BasicDataSource) ds;
         bds.close();
     }
-    
     
     public static void main(String[] args) {
         // First we set up the BasicDataSource.
