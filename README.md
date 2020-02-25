@@ -5,10 +5,10 @@
 
 #### JDK
 
-- JDK 11+
+- JDK 8
 
 for vscode specific workspace specific `settings.json`:
-`"java.home": "/Users/binle/.sdkman/candidates/java/11.0.6.hs-adpt"`
+`"java.home": "/Users/binle/.sdkman/candidates/java/8.0.242.hs-adpt"`
 
 
 #### Oracle jdbc [optional]
