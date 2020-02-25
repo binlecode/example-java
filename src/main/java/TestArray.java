@@ -9,9 +9,6 @@ class TestArray {
                 break;
             }
         }
-        
-            
-        
     }
     
     
@@ -25,11 +22,5 @@ class TestArray {
         int[] intArr3 = {1,2,3};
         
         linearSearch(intArr2, 13);
-        
-        
-        
-        
-            
-        
     }
 }

@@ -1,11 +1,4 @@
 
-/* hello.java
-
-*/
-
-
-import java.util.Map;
-import java.util.Properties;
 import java.util.Stack;
 
 class TestString {
