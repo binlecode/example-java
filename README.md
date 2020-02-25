@@ -3,7 +3,25 @@
 
 ### Requirements
 
+#### JDK
+
 - JDK 11+
+
+for vscode specific workspace specific `settings.json`:
+`"java.home": "/Users/binle/.sdkman/candidates/java/11.0.6.hs-adpt"`
+
+
+#### Oracle jdbc [optional]
+
+Due to Oracle license restriction, there are no public repositories that provide ojdbc jar.
+You need to download it and install in your local repository. Get jar from Oracle and install it in your local maven repository using:
+```bash
+mvn install:install-file -Dfile={path/to/your/ojdbc.jar} \
+    -DgroupId=com.oracle \
+    -DartifactId=ojdbc6 \
+    -Dversion=11.2.0 \
+    -Dpackaging=jar
+```
 
 
 ### Todos

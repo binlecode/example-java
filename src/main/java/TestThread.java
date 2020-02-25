@@ -4,7 +4,11 @@ class TestThread extends Thread {
     public void run() {
         for (int i=0; i<100; i++) {
             System.out.println("saying hello in a thread, count " + i);
-            Thread.sleep(1);
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ie) {
+                // do nothing
+            }
         }
         
     }

@@ -1,6 +1,3 @@
-package blecommons;
-
-
 
 class TestArray {
     
