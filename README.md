@@ -1,5 +1,7 @@
 ## Welcome to Basic Java Tutorial With Code Snippets
 
+Travis-CI:
+https://travis-ci.org/binlecode/example-java.svg?branch=jdk8
 
 ### Requirements
 
