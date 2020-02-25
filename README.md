@@ -1,15 +1,15 @@
 ## Welcome to Basic Java Tutorial With Code Snippets
 
-[![Build Status](https://travis-ci.org/binlecode/example-java.svg?branch=jdk8)](https://travis-ci.org/binlecode/example-java)
+[![Build Status](https://travis-ci.org/binlecode/example-java.svg?branch=master)](https://travis-ci.org/binlecode/example-java)
 
 ### Requirements
 
 #### JDK
 
-- JDK 8
+- JDK 11
 
 for vscode specific workspace specific `settings.json`:
-`"java.home": "/Users/binle/.sdkman/candidates/java/8.0.242.hs-adpt"`
+`"java.home": "/Users/binle/.sdkman/candidates/java/11.0.6.hs-adpt"`
 
 
 #### Oracle jdbc [optional]
