@@ -61,7 +61,7 @@ public class DemoSynchronizedVsVolatile {
         try {
             threadPrint("counter = " + syncCounter);
             // delay some time and change
-            for (int i = 0; i < 2; i++) {
+            for (var i = 0; i < 2; i++) {
                 TimeUnit.MILLISECONDS.sleep(500);
                 threadPrint("wait ...");
             }
@@ -83,7 +83,7 @@ public class DemoSynchronizedVsVolatile {
         try {
             threadPrint("counter = " + syncCounter);
             // delay some time then change counter
-            for (int i = 0; i < 5; i++) {
+            for (var i = 0; i < 5; i++) {
                 TimeUnit.MILLISECONDS.sleep(500);
                 threadPrint("wait ...");
             }
@@ -110,7 +110,7 @@ public class DemoSynchronizedVsVolatile {
                 .scheduleWithFixedDelay(() -> {  // use lambda as runnable
                     try {
                         threadPrint("    ADD => before, volaCounter: " + volaCounter);
-                        for (int i = 0; i < 3; i++) {
+                        for (var i = 0; i < 3; i++) {
                             threadPrint("    ADD => wait ...");
                             TimeUnit.MILLISECONDS.sleep(100);
                         }
@@ -128,7 +128,7 @@ public class DemoSynchronizedVsVolatile {
                 .scheduleWithFixedDelay(() -> {
                     try {
                         threadPrint("  SUB => before, volaCounter: " + volaCounter);
-                        for (int i = 0; i < 2; i++) {
+                        for (var i = 0; i < 2; i++) {
                             threadPrint("  SUB => wait ...");
                             TimeUnit.MILLISECONDS.sleep(100);
                         }
