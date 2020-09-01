@@ -14,12 +14,12 @@ import static java.util.stream.Collectors.counting;
 /**
  * NIO File and Path examples with Stream API
  */
-public class TestStreamWithNio {
+public class BasicStreamWithNio {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
 
         // use nio.Files to get a file from resource path
-        Path path = Paths.get(TestStream.class.getClassLoader()
+        Path path = Paths.get(BasicStreamWithNio.class.getClassLoader()
                 .getResource("test_csv_2_html.csv").toURI());
 
         List<String> linesCopy = new ArrayList<>();
