@@ -35,6 +35,8 @@ public class BasicStream {
         Integer intResult = iStrm.filter(i -> i > 4).filter(i -> i < 3).findAny().orElse(-1);
         System.out.println(intResult);
 
+        // use Stream class methods to build streams
+
         // Stream.of to build stream
         Stream.of("this is a sample text string".split(" "))
                 .sorted().forEach(ss -> System.out.println("stream sort: " + ss));
@@ -43,6 +45,9 @@ public class BasicStream {
         Stream.iterate(1, n -> n + n).limit(10)
                 .forEach(i -> System.out.println("stream iterate: " + i));
 
+        // Stream generator
+        Stream.generate(() -> "hello").limit(3)
+                .forEach(System.out::println);
     }
 
 }

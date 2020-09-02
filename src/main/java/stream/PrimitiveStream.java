@@ -6,13 +6,14 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * Java 8 introduces three primitive specialized stream interfaces to tackle this issue,
+ * Java 8 introduces three primitive specialized stream interfaces,
  * IntStream, DoubleStream, and LongStream, which respectively specialize the elements 
  * of a stream to be int, long, and double—and thereby avoid hidden boxing costs.
+ *
  * This cost saving is nontrivial when stream is very long (or unlimited) and computation
  * is heavy.
  */
-public class TestPrimitiveStream {
+public class PrimitiveStream {
 
     public static void main(String[] args) {
 
