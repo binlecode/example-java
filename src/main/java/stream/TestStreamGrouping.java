@@ -7,10 +7,9 @@ public class TestStreamGrouping {
 
     public static void main(String[] args) {
 
-//        simpleCollectorGrouping();
-
+        simpleCollectorGrouping();
 //        multiLevelGrouping();
-        partitioning();
+//        partitioning();
     }
 
     public static void simpleCollectorGrouping() {

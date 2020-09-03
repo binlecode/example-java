@@ -2,6 +2,7 @@ package stream;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -47,6 +48,10 @@ public class BasicStream {
 
         // Stream generator
         Stream.generate(() -> "hello").limit(3)
+                .forEach(System.out::println);
+
+        // generator is useful for generating random variables
+        Stream.generate(() -> UUID.randomUUID()).limit(5).map((uuid) -> "UUID: " + uuid)
                 .forEach(System.out::println);
     }
 

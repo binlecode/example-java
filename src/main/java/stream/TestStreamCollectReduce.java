@@ -13,12 +13,9 @@ import java.util.stream.Stream;
 public class TestStreamCollectReduce {
 
     public static void main(String[] args) {
-
         streamMaxMinSum();
         collectorReducingAndStreamReduce();
     }
-
-
 
     public static void streamMaxMinSum() {
         System.out.println("max of int stream: " +
@@ -35,6 +32,7 @@ public class TestStreamCollectReduce {
                         .limit(10)
                         .collect(Collectors.summingDouble(Double::doubleValue))
         );
+
         // the Collectors.summingDouble(...) can be simplified by .sum() method
         System.out.println("sum of int stream: " +
                 IntStream.generate(() -> (int)(Math.random() * 100))
@@ -50,7 +48,7 @@ public class TestStreamCollectReduce {
                 .orElse(0)
         );
 
-        // now all above combined into one convenient summerizing method that provides
+        // all above can be combined into one convenient summarizing method that provides
         // count, sum, max, min, and average in SummaryStatistics object
         System.out.println("summary of double stream: " +
                 Stream.generate(Math::random)
@@ -61,7 +59,7 @@ public class TestStreamCollectReduce {
 
     /**
      * The Collectors.reducing factory method is a generalization of stream reducing support.
-     * For most cases, the same logic can be implemented via Stream.reduce functional API.
+     * In most cases, the same logic can be implemented via Stream.reduce functional API.
      */
     public static void collectorReducingAndStreamReduce() {
         // the Collectors.summing method is essentially doing:
@@ -81,6 +79,7 @@ public class TestStreamCollectReduce {
                         .reduce((a, b) -> a + b)
                         .orElse(0)
         );
+
         // the result Optional object can be replaced by providing a seed variable for the reduce function
         System.out.println("summing with Stream.reduce with seed: " +
                 Stream.generate(() -> (int)(Math.random() * 100))
@@ -88,7 +87,7 @@ public class TestStreamCollectReduce {
                         .reduce(0, (a, b) -> a + b)
         );
 
-        // now doing comparision reducing for max / min value
+        // now doing comparison reducing for max / min value
         System.out.println("max with Collectors.reducing: " +
                 DoubleStream.generate(Math::random)
                         .limit(10)
@@ -96,6 +95,7 @@ public class TestStreamCollectReduce {
                         .collect(Collectors.reducing((a, b) -> a > b ? a : b))
                         .orElse(null)
         );
+
         // or using Stream.reduce() with BinaryOperator functional interface
         System.out.println("min with Stream.reduce: " +
                 DoubleStream.generate(Math::random)
@@ -105,16 +105,5 @@ public class TestStreamCollectReduce {
                         .orElse(null)
         );
     }
-
-    /**
-     * You may wonder the difference b/t Stream.reduce(..) vs Stream.collect(Collectors.reducing(..)).
-     */
-    public static void collectorReducingVsStreamReduce() {
-
-
-    }
-
-
-
 
 }
