@@ -12,9 +12,16 @@ import java.util.Date;
 import java.util.stream.IntStream;
 
 /**
+ * In RxJava, the Observable3 plays the role of the Publisher in the Flow API, so the Observer similarly corresponds
+ * to Flow’s Subscriber interface.
+ * The RxJava Observer interface declares the same methods as the Java 9 <code>Subscriber</code>.
+ *
+ * Observable doesn’t support backpres- sure, so it doesn’t have a request method that forms part of a
+ * <code>Subscription</code>.
+ *
  * Observable can emit an arbitrary number of values optionally followed by completion or error (but not both).
  *
- * there are two type of Observables: code and hot
+ * There are two types of Observables: code and hot
  * - cold observable: only emit when subscribed, does not cause backpressure
  * - hot observable: emit data once established regardless of subscription
  */
@@ -22,10 +29,9 @@ public class TestObservable {
 
 
     public static void main(String[] args) {
-
         basicObserver();
         simpleObserver();
-        observableFactory();
+        observableFactories();
         asyncObserver();
     }
 
@@ -39,23 +45,23 @@ public class TestObservable {
      * interface Observer<T> {
      *     void onNext(T t)
      *     void onError(Throwable t)
-     *     void onCompleted()
+     *     void onComplete()
      * }
      * </code>
+     *
      * It is legal to put either onError or onComplete followed by additional onNext event(s), but the subscriber
      * has already stopped consumption.
-     *
      */
     public static void basicObserver() {
 
-        // an example of cold observable, emit data when calling subscribe(...)
+        // this is a cold observable, emit data when calling subscribe(...)
 
         Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
                 emitter.onNext(1);
                 emitter.onNext(2);
-                emitter.tryOnError(new RuntimeException("blowed up"));
+                emitter.tryOnError(new RuntimeException("blown up"));
                 emitter.onNext(3);
                 emitter.onComplete();
                 emitter.onNext(4);
@@ -74,9 +80,7 @@ public class TestObservable {
             }
 
             @Override
-            public void onError(Throwable e) {
-
-            }
+            public void onError(Throwable e) { System.out.println("error: " + e.getMessage()); }
 
             @Override
             public void onComplete() {
@@ -91,8 +95,8 @@ public class TestObservable {
     }
 
     /**
-     * Simplified version of observable and subscriber defintion using lambdas.
-     * <p>
+     * Simplified version of observable and subscriber definition using lambdas.
+     *
      * Actual criteria of async/sync observable is whether the Observable event production is blocking or nonblocking.
      */
     public static void simpleObserver() {
@@ -112,6 +116,7 @@ public class TestObservable {
 
                 subscriber.onNext(d.plusDays(30));  // won't be consumed
             } catch (Exception e) {
+                // pass the error as an event to the subscriber
                 subscriber.onError(e);
             }
         });
@@ -130,23 +135,36 @@ public class TestObservable {
     /**
      * Show some commonly used observable factory methods.
      */
-    public static void observableFactory() {
-        // Observable.just(value): a shortcut to emit just one element and complete
-        Observable<String> obsl1 = Observable.just("One Item");
+    public static void observableFactories() {
+        // Observable.just(value): a shortcut to emit just a few elements and complete
+        Observable<String> obsl1 = Observable.just("First Item", "Second Item");
         obsl1.subscribe(System.out::println);
 
         // Observable.from(values): a shortcut to emit multiple elements
         Observable<Date> obsl2 = Observable.fromArray(new Date[]{new Date(), new Date(2000, 11, 10)});
-        obsl2.subscribe(elm -> System.out.println(elm));
+        obsl2.subscribe(elm -> System.out.println("subscriber one: " + elm));
         // an observable can have numerous subscribers
-        obsl2.subscribe(elm -> System.out.println("from another subscriber: " + elm));
+        obsl2.subscribe(elm -> System.out.println("subscriber two: " + elm));
 
         // Observable.range(start, count) to emit a range of integers
         Observable.range(1, 3).subscribe(System.out::println);
 
+        // fromCallable() factory takes a callback function as a single onNext event, and wrap with try-catch
+        // to support onError event
+        Observable.fromCallable(() -> new Date())
+                .subscribe(
+                        (msg) -> { System.out.println("onNext: " + msg); },
+                        (err) -> { System.out.println(("onError: " + err)); },
+                        () -> { System.out.println(("onComplete")); }
+                );
+        // exception in callback is observed as onError event
+        Observable.fromCallable(() -> { throw new RuntimeException("callback thrown error"); })
+                .subscribe(
+                        (msg) -> System.out.println("onNext: " + msg),
+                        (err) -> System.out.println(("onError: " + err)),
+                        () -> System.out.println(("onComplete"))  // won't be triggered since onError is observed
+                );
 
-        // fromCallable() factory addresses try-catch wrapped onError support with single onNext event
-        Observable.fromCallable(() -> new Date()).subscribe(System.out::println);
     }
 
     /**
@@ -169,12 +187,13 @@ public class TestObservable {
               s.onNext(1);
               s.onNext(2);
            }).start();
-        }).doOnNext(elm -> System.out.println("onNext thread: " + Thread.currentThread()))
-                .filter(i -> (Integer) i > 0)
-                .map(i -> "consuming: " + i)
-                .subscribe(System.out::println);
-        System.out.println("get printed first, main thread: " + Thread.currentThread());
-    }
+        }) // all the pipeline steps below are from same thread, different from the main thread
+        .doOnNext(elm -> System.out.println("onNext thread: " + Thread.currentThread()))
+        .filter(i -> (Integer) i > 0)
+        .map(i -> "converting to string for: " + i + " by thread: " + Thread.currentThread())
+        .subscribe(System.out::println);
 
+        System.out.println("get printed first by main thread: " + Thread.currentThread());
+    }
 
 }
