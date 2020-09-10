@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/binlecode/example-java.svg?branch=master)](https://travis-ci.org/binlecode/example-java)
 
-### Requirements
+## Site document 
+
+[Project Homepage](./docs/index.md)
 
 #### JDK
 
@@ -45,7 +47,10 @@ API documents are at `target/site/apidocs`.
 ### Todos
 
 - [x] build source code example index in README
-- [ ] build sonar and travis-CI hook-up
+- [x] build travis-CI build
+- [x] build github action build
+- [x] generate java site and api doc with github pages hosting
+- [ ] build sonar integration with travis-CI hook-up
 - [ ] review equal and hashCode examples
 - [x] add function reference example
 - [x] add more stream examples
@@ -69,12 +74,3 @@ API documents are at `target/site/apidocs`.
 - [ ] toMap: converts an Observable into another object or data structure
 - [ ] test: returns TestObserver with current Observable subscribed
 - [ ] timeout: to handle timeouts, e.g. deliver some fallback data 
-
-
- 
-
-#### misc notes list
-- [Core Java basics](docs/tutorial/core-java.md)
-- [Java 8 basics](docs/tutorial/java-8-basics.md)
-- [Java concurrency](docs/tutorial/java-concurrency.md)
-
