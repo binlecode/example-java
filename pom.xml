@@ -61,15 +61,19 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
                 </plugin>
-
-
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                     <configuration> <!-- add this to disable checking -->
                         <doclint>none</doclint>   <!-- this is needed for v3.0+ -->
                     </configuration>
+                </plugin>
+                <!-- specify maven site plugin version to avoid default version related class not found error -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.9.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>

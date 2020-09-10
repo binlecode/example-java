@@ -2,7 +2,16 @@
 
 [![Build Status](https://travis-ci.org/binlecode/example-java.svg?branch=master)](https://travis-ci.org/binlecode/example-java)
 
-### Requirements
+## Site and API documents
+
+[Site document](./site/index.html)
+
+[API document](./site/apidocs/index.html)
+
+## misc notes list
+- [Core Java basics](./docs/core-java.md)
+- [Java 8 basics](./docs/java-8-basics.md)
+- [Java concurrency](./docs/java-concurrency.md)
 
 #### JDK
 
@@ -38,8 +47,10 @@ To generate package API doc:
 ./mvnw javadoc:javadoc
 ```
 
-Site documents are at folder path `target/site`.
-API documents are at `target/site/apidocs`.
+Site documents are generated at folder path `target/site`.
+API documents are generated at `target/site/apidocs`.
+
+
 
 
 ### Todos
@@ -73,8 +84,4 @@ API documents are at `target/site/apidocs`.
 
  
 
-#### misc notes list
-- [Core Java basics](./docs/core-java.md)
-- [Java 8 basics](./docs/java-8-basics.md)
-- [Java concurrency](./docs/java-concurrency.md)
 
