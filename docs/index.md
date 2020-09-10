@@ -8,10 +8,11 @@
 
 [API document](./site/apidocs/index.html)
 
-## misc notes list
-- [Core Java basics](./docs/core-java.md)
-- [Java 8 basics](./docs/java-8-basics.md)
-- [Java concurrency](./docs/java-concurrency.md)
+## Tutorials
+
+- [Core Java basics](./tutorial/core-java.md)
+- [Java 8 basics](./tutorial/java-8-basics.md)
+- [Java concurrency](./tutorial/java-concurrency.md)
 
 #### JDK
 

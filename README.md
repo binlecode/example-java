@@ -74,7 +74,7 @@ API documents are at `target/site/apidocs`.
  
 
 #### misc notes list
-- [Core Java basics](./docs/core-java.md)
-- [Java 8 basics](./docs/java-8-basics.md)
-- [Java concurrency](./docs/java-concurrency.md)
+- [Core Java basics](docs/tutorial/core-java.md)
+- [Java 8 basics](docs/tutorial/java-8-basics.md)
+- [Java concurrency](docs/tutorial/java-concurrency.md)
 
