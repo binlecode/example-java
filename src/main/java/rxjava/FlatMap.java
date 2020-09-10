@@ -29,13 +29,11 @@ import java.util.stream.Collectors;
  * emissions from the transformed Observables, but instead emits these emissions in strict order, often called
  * ConcatMap or something similar.
  */
-public class TestFlatMap {
+public class FlatMap {
 
     public static void main(String[] args) {
-
-        lowLevelFlatMap();
-
-        simpleFlatMap();
+        lowLevelFlatMapWithObservable();
+        simpleFlatMapWithStream();
     }
 
     /**
@@ -45,30 +43,29 @@ public class TestFlatMap {
      * output observable with String type. The flatMap operator expects this observable and merge it into
      * the new stream it creates.
      */
-    public static void lowLevelFlatMap() {
-        List<List<String>> list = Arrays.asList(
-                Arrays.asList("ab", "sf", "de", "fg"),
-                Arrays.asList("byd", "nc", "mk"));
-        System.out.println(list);
-
+    public static void lowLevelFlatMapWithObservable() {
         Observable.create(new ObservableOnSubscribe<List<String>>() {
             @Override
             public void subscribe(ObservableEmitter<List<String>> emitter) throws Exception {
                 emitter.onNext(Arrays.asList("ab", "sf", "de", "fg"));
                 emitter.onNext(Arrays.asList("byd", "nc", "mk"));
             }
-        }).flatMap(new Function<List<String>, Observable<String>>() {
+        })
+        // doOnNext works like 'peek' in stream api
+        .doOnNext((msg) -> System.out.println("before flatMap, onNext message: " + msg))
+        .flatMap(new Function<List<String>, Observable<String>>() {
             @Override
             public Observable<String> apply(List<String> words) throws Exception {
                 return Observable.fromIterable(words);
             }
-        }).subscribe(System.out::println);
+        }).subscribe((msg) -> System.out.println("after flatMap, onNext message: " + msg));
     }
 
     /**
-     * This is the common (simplified syntax) way of using flatMap with lambda or method reference.
+     * This is the common (simplified syntax) way of using flatMap with lambda or method reference
+     * in using stream api.
      */
-    public static void simpleFlatMap() {
+    public static void simpleFlatMapWithStream() {
 
         List<List<String>> list = Arrays.asList(
                 Arrays.asList("ab", "sf", "de", "fg"),
@@ -76,8 +73,10 @@ public class TestFlatMap {
         System.out.println(list);
 
         System.out.println(list.stream()
-                // stream method is converting a collection to an observable stream ready to be 'flattened'
+                .peek(System.out::println)   // peek stream element before flatMap
+                // stream method is converting a collection to a stream ready to be 'flattened'
                 .flatMap(Collection::stream)
+                .peek(System.out::println)   // peek stream element after flatMap
                 // now this new flattened stream can be applied a normal mapping function (each elm is a string)
                 .map(String::toUpperCase)
                 .collect(Collectors.toList())
