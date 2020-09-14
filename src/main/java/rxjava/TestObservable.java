@@ -29,15 +29,16 @@ public class TestObservable {
 
 
     public static void main(String[] args) {
-        basicObserver();
-        simpleObserver();
+        coldObservableWithInlineClass();
+        coldObserverWithLambdaFunction();
         observableFactories();
-        asyncObserver();
+        asyncObservable();
     }
 
     /**
-     * Mechanical observer construction with inline class overridden methods to show low level functionality.
-     * Below is a synchronous cold observable.
+     * A synchronous cold observable construction with inline class to emit message by calling
+     * emitter's event handler callbacks (onNext, onError, and onComplete).
+     *
      * <code>
      * interface Observable<T> {
      *     Subscription subscribe(Observer s)
@@ -49,12 +50,13 @@ public class TestObservable {
      * }
      * </code>
      *
-     * It is legal to put either onError or onComplete followed by additional onNext event(s), but the subscriber
-     * has already stopped consumption.
+     * It is legal to put either onError or onComplete followed by additional onNext event(s),
+     * but the subscriber has already stopped consumption.
      */
-    public static void basicObserver() {
+    public static void coldObservableWithInlineClass() {
 
-        // this is a cold observable, emit data when calling subscribe(...)
+        // this is a cold observable, only emitting data by emitter onNext() call
+        // the emitter is passed in as an argument to the in-line class's subscribe() method
 
         Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
@@ -89,19 +91,18 @@ public class TestObservable {
         };
 
         // So every time you subscribe to an Observable, a new Subscriber instance is created and passed
-        // to Observable's create() factory method. Calling onNext() or other methods of subscriber inside
+        // to Observable create() factory method. Calling onNext() or other methods of subscriber inside
         // create() indirectly invokes the subscriber.
         observable.subscribe(observer);
     }
 
     /**
-     * Simplified version of observable and subscriber definition using lambdas.
-     *
-     * Actual criteria of async/sync observable is whether the Observable event production is blocking or nonblocking.
+     * Shows definition of Observable and Subscribers using lambdas functions.
      */
-    public static void simpleObserver() {
+    public static void coldObserverWithLambdaFunction() {
 
-        Observable<LocalDate> dateStream = Observable.create(subscriber -> {
+        // a lambda function is passed to the create() method which takes a functional interface argument
+        Observable<LocalDate> dateStream = Observable.create(emitter -> {
             // this try-catch is a common pattern to address error propagation down to subscriber(s)
             try {
                 LocalDate d = LocalDate.now();
@@ -109,31 +110,32 @@ public class TestObservable {
                 IntStream.rangeClosed(1, 3).forEach(i -> {
                     LocalDate dp = d.plusDays(i);
                     System.out.println("pushing date: " + dp);
-                    subscriber.onNext(dp);   // feeding data to the subscriber's onNext() call
+                    emitter.onNext(dp);   // feeding data to the subscriber's onNext() call
                 });
 
-                subscriber.onComplete();           // subscriber will stop pulling data from now on
+                emitter.onComplete();           // subscriber will stop pulling data from now on
 
-                subscriber.onNext(d.plusDays(30));  // won't be consumed
+                emitter.onNext(d.plusDays(30));  // won't be consumed
             } catch (Exception e) {
                 // pass the error as an event to the subscriber
-                subscriber.onError(e);
+                emitter.onError(e);
             }
         });
 
+        // define a subscriber with lambda functions as its event callbacks
         dateStream.subscribe(
                 date -> System.out.println(date),
                 err -> System.out.println("error reported: \n" + err.getStackTrace()),
                 () -> System.out.println("completed")
         );
 
-        // Add another subscriber, which only supplies onNext callback.
+        // define another subscriber, which only supplies onNext callback.
         // In other words, completion and error events are ignored
         dateStream.subscribe(date -> System.out.println("from another subscriber: " + date));
     }
 
     /**
-     * Show some commonly used observable factory methods.
+     * Shows some commonly used observable factory methods.
      */
     public static void observableFactories() {
         // Observable.just(value): a shortcut to emit just a few elements and complete
@@ -168,10 +170,13 @@ public class TestObservable {
     }
 
     /**
+     * The real criteria of sync/async observable is whether the Observable event production is blocking
+     * or nonblocking.
+     * <p>
      * Most Observable function pipelines are synchronous (unless a specific operator needs to be async,
      * such as timeout or observeOn), whereas the Observable itself can be async.
      * <p>
-     * events (onNext(), onCompleted(), onError()) can never be emitted concurrently.
+     * Events (onNext(), onCompleted(), onError()) can never be emitted concurrently.
      * <p>
      * In this example, the Observable is async (it emits on a thread different from that of the subscriber),
      * so subscribe is nonblocking, and the println at the end will output before events are propagated.
@@ -180,7 +185,7 @@ public class TestObservable {
      * the events. This is generally the behavior we want: an asynchronous pipeline (the Observable and composed
      * operators) with efficient synchronous computation of the events.
      */
-    public static void asyncObserver() {
+    public static void asyncObservable() {
 
         Observable.create(s -> {
            new Thread(() -> {    // event emitting asynchronously
