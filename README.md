@@ -4,7 +4,7 @@
 
 ## Site document 
 
-[Project Homepage](./docs/index.md)
+[Project Homepage](https://binlecode.github.io/example-java/)
 
 #### JDK
 
