@@ -12,27 +12,34 @@ import java.util.Date;
 import java.util.stream.IntStream;
 
 /**
- * In RxJava, the Observable3 plays the role of the Publisher in the Flow API, so the Observer similarly corresponds
- * to Flow’s Subscriber interface.
- * The RxJava Observer interface declares the same methods as the Java 9 <code>Subscriber</code>.
- *
- * Observable doesn’t support backpres- sure, so it doesn’t have a request method that forms part of a
- * <code>Subscription</code>.
+ * Basic definition of observable and observer:
+ * - Observable represents any object that can get data from a data source and whose state may be of
+ *   interest in a way that other objects may register an interest.
+ * - An observer is any object that wishes to be notified when the state of another object changes.
  *
  * Observable can emit an arbitrary number of values optionally followed by completion or error (but not both).
+ * An observer subscribes to an Observable sequence. The sequence sends items to the observer one at a time.
+ *
+ * In RxJava, an observer will never be called with an item out of order or called before the callback has
+ * returned for the previous item.
+ *
+ * In RxJava, the Observable plays the role of the Publisher in the Java 9 Flow API, so the Observer similarly
+ * corresponds to Flow’s <code>Subscriber</code> interface.
+ *
+ * RxJava Observable does not support backpressure, so it does not have a request method that forms part
+ * of a <code>Subscription</code> in Flow API.
  *
  * There are two types of Observables: code and hot
  * - cold observable: only emit when subscribed, does not cause backpressure
  * - hot observable: emit data once established regardless of subscription
  */
-public class TestObservable {
-
+public class ColdObservable {
 
     public static void main(String[] args) {
         coldObservableWithInlineClass();
         coldObserverWithLambdaFunction();
         observableFactories();
-        asyncObservable();
+        asyncColdObservable();
     }
 
     /**
@@ -185,14 +192,15 @@ public class TestObservable {
      * the events. This is generally the behavior we want: an asynchronous pipeline (the Observable and composed
      * operators) with efficient synchronous computation of the events.
      */
-    public static void asyncObservable() {
+    public static void asyncColdObservable() {
 
-        Observable.create(s -> {
+        Observable.create(sub -> {
            new Thread(() -> {    // event emitting asynchronously
-              s.onNext(1);
-              s.onNext(2);
+              sub.onNext(1);
+              sub.onNext(2);
            }).start();
         }) // all the pipeline steps below are from same thread, different from the main thread
+        // doOnNext() is similar to peek() in stream API
         .doOnNext(elm -> System.out.println("onNext thread: " + Thread.currentThread()))
         .filter(i -> (Integer) i > 0)
         .map(i -> "converting to string for: " + i + " by thread: " + Thread.currentThread())
